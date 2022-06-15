@@ -31,7 +31,6 @@ const App = () => {
   const selectedVoteValue = votes[selected];
 
   const maxVotedAnecdot = Object.keys(votes).reduce((a,b) => votes[a] > votes[b] ? a : b);
-  //Math.max(...Object.values(votes))
 
   const handleRandomAnecdote = () => {
     setSelected(Math.floor(Math.random()*anecdotes.length));
@@ -48,13 +47,13 @@ const App = () => {
   return (
     <div>
       <h1>Anecdote of the day</h1>
-      {anecdotes[selected]}
+      <p>{anecdotes[selected]}</p>
       <br />
       <Button name='next anecdote' onClick={handleRandomAnecdote} />
       <Button name='vote' onClick={() => handleAddVote(selected)}/>
       <p>has {votes[selected]} votes</p>
       <h1>Anecdote with most votes</h1>
-      {anecdotes[maxVotedAnecdot]}
+      <p>{anecdotes[maxVotedAnecdot]}</p>
     </div>
   )
 }
