@@ -66,10 +66,24 @@ const App = () => {
       number: newNumber,
       id: persons.length + 1
     }
-    if(persons.some(el => el.name === newName)) {
+
+      personsService
+           .create(nameObj)
+           .then(returnedPerson => {
+              setPersons(persons.concat(returnedPerson));
+              setNewName('');
+              setNewNumber('');
+              setError(false);
+              handleNotification(`Added ${returnedPerson.name}`);
+           })
+           .catch(error => {
+              setError(true)
+              handleNotification(error.response.data.error);
+           })
+     if(persons.some(el => el.number === newNumber)) {
       if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
         const findId = persons
-          .filter(person => person.name === newName)
+          .filter(person => person.number === newNumber)
           .map(person => person.id)[0];
 
         const specificPerson = persons.find(person => person.id === findId)
@@ -79,7 +93,7 @@ const App = () => {
         personsService
           .update(findId, changedPerson)
           .then(returnedPerson => {
-            setPersons(persons.map(person => person.id !== findId ? person : returnedPerson))
+             setPersons(persons.map(person => person.id !== findId ? person : returnedPerson))
           })
           .catch(error => {
             setError(true)
@@ -91,16 +105,8 @@ const App = () => {
         return null;
       }
     } else {
-      personsService
-        .create(nameObj)
-        .then(returnedPerson => {
-          setPersons(persons.concat(returnedPerson));
-          setNewName('');
-          setNewNumber('');
-          setError(false);
-          handleNotification(`Added ${returnedPerson.name}`);
-        })
-    }
+        return null;
+     }
   }
 
   useEffect(() => {
